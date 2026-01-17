@@ -40,22 +40,65 @@
         spoons-flakes.nixosModules.nixos-base
       ];
     };
-    apps.${system}.test =
-    let
-      drv = pkgs.writeShellApplication {
-        name = "test";
-        runtimeInputs = [ ];
-        text = ''
-          # shellcheck source=/dev/null
-          source ${garnix-actions.lib.${system}.withCIEnvironment}
-          echo hello
-          echo "$GARNIX_COMMIT_SHA $GARNIX_BRANCH"
-          echo "${self.packages.${system}.nixos-base}"
-        '';
+
+    apps.${system} = {
+      setup = garnix-actions.lib.${system}.getGitHubPAT {
+        appName = "setup";
+        appDescription = "foo";
+        actionName = "storeImageURL";
+        encryptedTokenFile = "image_url_push_token";
       };
-    in {
-      type = "app";
-      program = "${drv}/bin/${drv.name}";
+
+      storeImageURL = 
+      let
+        drv = pkgs.writeShellApplication (
+        let
+          encryptedTokenFile = ./image_url_push_token;
+        in {
+          name = "storeImageURL";
+          runtimeInputs = with pkgs; [
+            curl
+            gawk
+            gitMinimal
+            age
+          ];
+          text = ''
+            # shellcheck source=/dev/null
+            source ${garnix-actions.lib.${system}.withCIEnvironment}
+            echo hello
+            echo "$GARNIX_COMMIT_SHA $GARNIX_BRANCH"
+            hash=$(echo "${self.packages.${system}.nixos-base}" | sed -e 's|/nix/store/||' -e 's/-.*$//')
+            echo "hash is $hash"
+            url=$(curl -s "https://cache.garnix.io/''${hash}.narinfo" | grep ^URL: | awk '{print $2}')
+            echo "url is $url"
+            if [ -e .secrets ]; then
+              echo "using local github secrets"
+              GITHUB_API_TOKEN="$(cat ./.secrets)"
+            else
+              GITHUB_API_TOKEN=$(age --decrypt --identity "$GARNIX_ACTION_PRIVATE_KEY_FILE" ${encryptedTokenFile})
+            fi
+            if [ -z "$GITHUB_API_TOKEN" ]; then
+              echo "no github token, aborting here!"
+              exit 1
+            fi
+            gitdir=$(mktemp -d)
+            git clone -b image-data "https://srd424:$GITHUB_API_TOKEN@github.com/spoonstech/vm-base-images" "$gitdir"
+            mkdir -p "$gitdir/nixos-base"
+            echo "$url" >"$gitdir/nixos-base/url"
+            _g () { git -C "$gitdir" "$@"; }
+#            git -C "$gitdir" add -A
+            _g add -A
+#            git -C "$gitdir" commit -m "Updated by garnix CI"
+            _g commit -m "Updated by garnix CI"
+#            git push
+            _g push
+            rm -r -f "$gitdir"
+          '';
+        });
+      in {
+        type = "app";
+        program = "${drv}/bin/${drv.name}";
+      };
     };
   };
 }
