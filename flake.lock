@@ -72,12 +72,12 @@
         "rev": "15106730deb78351690e4844035b20182c6d26f3",
         "revCount": 4,
         "type": "git",
-        "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-flakes.git"
+        "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-modules.git"
       },
       "original": {
         "ref": "main",
         "type": "git",
-        "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-flakes.git"
+        "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-modules.git"
       }
     }
   },

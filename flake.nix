@@ -11,7 +11,7 @@
 #      url = "git+https://codeberg.org/srd424/garnix-builds.git";
 #    };
     spoons-flakes = {
-      url = "git+https://forge.deathbycomputers.co.uk/spoons.technology/nixos-flakes.git?ref=main";
+      url = "git+https://forge.deathbycomputers.co.uk/spoons.technology/nixos-modules.git?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
