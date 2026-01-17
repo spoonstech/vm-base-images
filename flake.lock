@@ -66,11 +66,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768641595,
-        "narHash": "sha256-vI2dQOzSoNb3ny3prZs+dcm2QgIXhl6mgUwWFlr7C/g=",
+        "lastModified": 1768654083,
+        "narHash": "sha256-7zqLNI10aIKZIib6M6UAj9e4hbcBezCdqtfGT5ezXvI=",
         "ref": "main",
-        "rev": "d6369fffd6c16bd1fce713f0ab68bf94bc78fb4c",
-        "revCount": 5,
+        "rev": "be4e5e5eccfde0ae3d6c543c1e3755353283cf35",
+        "revCount": 6,
         "type": "git",
         "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-modules.git"
       },

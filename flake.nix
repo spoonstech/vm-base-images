@@ -21,13 +21,16 @@
   };
 
   outputs = { self, nixpkgs, spoons-flakes, nixos-generators }:
-  {
+  let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
     packages.x86_64-linux.nixos-base = nixos-generators.nixosGenerate {
       system = "x86_64-linux";
       format = "qcow-efi";
       modules = [
         {
-          spoons.nixos-image.authorizedKey = (builtins.readFile ./authorized_key);
+          spoons.nixos-image.authorizedKeys = (pkgs.lib.splitString "\n" (builtins.readFile ./authorized_keys));
           system.stateVersion = "25.11";
         }
         spoons-flakes.nixosModules.nixos-base
