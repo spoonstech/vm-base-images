@@ -83,6 +83,10 @@
               exit 1
             fi
             gitdir=$(mktemp -d)
+
+            git config --global user.email "core-admin@ext-mail.spoons.technology"
+            git config --global user.name "VM image update action"
+
             git clone "https://srd424:$GITHUB_API_TOKEN@github.com/spoonstech/vm-image-data" "$gitdir"
             mkdir -p "$gitdir/nixos-base"
             echo "$url" >"$gitdir/nixos-base/url"
