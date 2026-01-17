@@ -18,15 +18,19 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    garnix-actions = {
+      url = "github:garnix-io/actions";
+    };
   };
 
-  outputs = { self, nixpkgs, spoons-flakes, nixos-generators }:
+  outputs = { self, nixpkgs, spoons-flakes, nixos-generators, garnix-actions }:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-    packages.x86_64-linux.nixos-base = nixos-generators.nixosGenerate {
-      system = "x86_64-linux";
+    packages.${system}.nixos-base = nixos-generators.nixosGenerate {
+      #system = "x86_64-linux";
+      inherit system;
       format = "qcow-efi";
       modules = [
         {
@@ -35,6 +39,23 @@
         }
         spoons-flakes.nixosModules.nixos-base
       ];
+    };
+    apps.${system}.test =
+    let
+      drv = pkgs.writeShellApplication {
+        name = "test";
+        runtimeInputs = [ ];
+        text = ''
+          # shellcheck source=/dev/null
+          source ${garnix-actions.lib.${system}.withCIEnvironment}
+          echo hello
+          echo "$GARNIX_COMMIT_SHA $GARNIX_BRANCH"
+          echo "${self.packages.${system}.nixos-base}"
+        '';
+      };
+    in {
+      type = "app";
+      program = "${drv}/bin/${drv.name}";
     };
   };
 }
