@@ -83,7 +83,7 @@
               exit 1
             fi
             gitdir=$(mktemp -d)
-            git clone -b image-data "https://srd424:$GITHUB_API_TOKEN@github.com/spoonstech/vm-base-images" "$gitdir"
+            git clone "https://srd424:$GITHUB_API_TOKEN@github.com/spoonstech/vm-image-data" "$gitdir"
             mkdir -p "$gitdir/nixos-base"
             echo "$url" >"$gitdir/nixos-base/url"
             _g () { git -C "$gitdir" "$@"; }
