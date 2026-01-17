@@ -61,6 +61,7 @@
             gawk
             gitMinimal
             age
+            gnused
           ];
           text = ''
             # shellcheck source=/dev/null
