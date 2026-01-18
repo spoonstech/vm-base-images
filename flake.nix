@@ -28,18 +28,32 @@
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
   in {
-    packages.${system}.nixos-base = nixos-generators.nixosGenerate {
-      #system = "x86_64-linux";
-      inherit system;
-      format = "qcow-efi";
+    nixosConfigurations.nixos-base = nixpkgs.lib.nixosSystem {
+      inherit pkgs;
       modules = [
         {
           spoons.nixos-image.authorizedKeys = (pkgs.lib.splitString "\n" (builtins.readFile ./authorized_keys));
           system.stateVersion = "25.11";
         }
         spoons-flakes.nixosModules.nixos-base
+        nixos-generators.nixosModules.qcow-efi
       ];
     };
+
+    packages.${system}.nixos-base = self.outputs.nixosConfigurations.nixos-base.config.system.build.qcow-efi;
+
+#    packages.${system}.nixos-base = nixos-generators.nixosGenerate {
+#      #system = "x86_64-linux";
+#      inherit system;
+#      format = "qcow-efi";
+#      modules = [
+#        {
+#          spoons.nixos-image.authorizedKeys = (pkgs.lib.splitString "\n" (builtins.readFile ./authorized_keys));
+#          system.stateVersion = "25.11";
+#        }
+#        spoons-flakes.nixosModules.nixos-base
+#      ];
+#    };
 
     apps.${system} = {
       setup = garnix-actions.lib.${system}.getGitHubPAT {
