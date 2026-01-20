@@ -89,7 +89,7 @@
               url=$(curl -s "https://cache.garnix.io/''${hash}.narinfo" | grep ^URL: | awk '{print $2}')
               [ -n "$url" ] && break
               echo -n "Waiting for cache to catch-up "
-              retries=$(($retries+1))
+              retries=$((retries+1))
               sleep 10
               [ $retries -ge 12 ] && exit 1
               echo -n ". "
