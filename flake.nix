@@ -84,7 +84,17 @@
             echo "$GARNIX_COMMIT_SHA $GARNIX_BRANCH"
             hash=$(echo "${self.packages.${system}.nixos-base}" | sed -e 's|/nix/store/||' -e 's/-.*$//')
             echo "hash is $hash"
-            url=$(curl -s "https://cache.garnix.io/''${hash}.narinfo" | grep ^URL: | awk '{print $2}')
+            retries=0
+            while true; do
+              url=$(curl -s "https://cache.garnix.io/''${hash}.narinfo" | grep ^URL: | awk '{print $2}')
+              [ -n "$url" ] && break
+              echo -n "Waiting for cache to catch-up "
+              retries=$(($retries+1))
+              sleep 10
+              [ $retries -ge 12 ] && exit 1
+              echo -n ". "
+            done
+            echo
             echo "url is $url"
             if [ -e .secrets ]; then
               echo "using local github secrets"
