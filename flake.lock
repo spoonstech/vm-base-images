@@ -91,11 +91,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1768621446,
-        "narHash": "sha256-6YwHV1cjv6arXdF/PQc365h1j+Qje3Pydk501Rm4Q+4=",
+        "lastModified": 1768773494,
+        "narHash": "sha256-XsM7GP3jHlephymxhDE+/TKKO1Q16phz/vQiLBGhpF4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "72ac591e737060deab2b86d6952babd1f896d7c5",
+        "rev": "77ef7a29d276c6d8303aece3444d61118ef71ac2",
         "type": "github"
       },
       "original": {
@@ -120,11 +120,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768654083,
-        "narHash": "sha256-7zqLNI10aIKZIib6M6UAj9e4hbcBezCdqtfGT5ezXvI=",
+        "lastModified": 1768942295,
+        "narHash": "sha256-jqDe7q0dxjlrx2eKbqasAuyvdwiJ0zHzXp2VIhzN19k=",
         "ref": "main",
-        "rev": "be4e5e5eccfde0ae3d6c543c1e3755353283cf35",
-        "revCount": 6,
+        "rev": "966772065db744407cb5370d30dfaf85cef11d2b",
+        "revCount": 7,
         "type": "git",
         "url": "https://forge.deathbycomputers.co.uk/spoons.technology/nixos-modules.git"
       },
